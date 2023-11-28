@@ -264,6 +264,7 @@ Settings :: struct {
 	maximize_on_start:                      bool;
 	save_all_before_build:                  bool;
 	show_hints:                             bool;
+	show_line_number:                       bool;
 };
 
 settings: Settings;

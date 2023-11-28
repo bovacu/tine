@@ -216,6 +216,13 @@ draw_text_editor :: fn (index: s32, x: f32, y: f32, w: f32, h: f32, loc := #call
 
 	_, first_position :: peek_row(buf, first_line_index);
 	_, last_position  :: peek_row(buf, std.min(cast(s32) buf.lines.len - 2, last_line_index) );
+	
+	if settings.show_line_number {
+	    last_line_number := str_new(32, application_context.temporary_allocator);
+	    str_concat(&last_line_number, last_position);
+	    line_number_size :: text_size(last_line_number, &font_ui_b);
+		tx += line_number_size / 2.0f + 5.0f;
+	}
 
 	// draw selection
 	{
@@ -298,6 +305,13 @@ draw_text_editor :: fn (index: s32, x: f32, y: f32, w: f32, h: f32, loc := #call
 			}
 		} else {
 			ly :: line_base_y + (line_height * 0.5f - font.height * 0.5f);
+			
+			if settings.show_line_number {
+				line_number := str_new(32, application_context.temporary_allocator);
+				str_concat(&line_number, i + 1);
+				text(0.0f, ly, line_number, colors.title_bar_text_color);
+			}
+			
 			code(tx, ly, line, line_colors, code_color_table);
 			line_base_y += line_height;
 		}
