@@ -414,6 +414,7 @@ MouseState :: enum #flags {
 	LB_DOWN;
 	LB_RELEASE;
 	LB_DBL_PRESS;
+	LB_TRP_PRESS;
 	LB_DRAGGING_START;
 	LB_DRAGGING;
 }
@@ -439,6 +440,7 @@ mouse: struct {
 
 	prev_mouse_pos: glm.v2;
 	prev_click_time_s: f64;
+	prev_prev_click_time_s: f64;
 };
 
 // We can speed up rendering and disable low-power mode in case some animation is running. Next
@@ -1821,13 +1823,19 @@ mouse_button_callback :: fn (_: *glfw.Window, button: s32, action: s32, _: s32) 
 					set_flag(&mouse.state, LB_DBL_PRESS);
 				}
 				mouse.prev_click_time_s = GetTime();
-			} else if action == RELEASE {
-				set_flag(&mouse.state, LB_RELEASE);
-				clr_flag(&mouse.state, LB_DOWN);
-			}
+            } else if action == RELEASE {
+                set_flag(&mouse.state, LB_RELEASE);
+                clr_flag(&mouse.state, LB_DOWN);
+            }
+        }
+		MOUSE_BUTTON_4 {
+			jump_to_previous_location();
 		}
-		default;
-	}
+		MOUSE_BUTTON_5 {
+			jump_to_next_location();
+		}
+        default;
+    }
 	set_prev_executed_command(Command.UNKNOWN);
 	if action == PRESS {
 		clear_message();
