@@ -934,6 +934,7 @@ insert_tab :: fn (editor: *Editor, buf: *Buffer) {
 
 		indented := str_new(max(str.len, 32)); // 0 cause assertion and we can indent empty lines.
 		defer str_delete(&indented);
+		set_cursor_position(buf, editor.cursor_index, get_selection_start(buf, editor.cursor_index));
 		
 		loop i := 0; i < lines.len; i += 1 {
 			jump_line_begin(editor, buf);
