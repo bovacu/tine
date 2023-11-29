@@ -964,7 +964,9 @@ delete_line :: fn (editor: *Editor, buf: *Buffer) bool {
 	jump_line_begin(editor, buf);
 	start_selection(buf, editor.cursor_index);
 	jump_next_line(editor, buf);
-	cut_selection(editor, buf);
+	start, end :: get_selection_range(buf, editor.cursor_index);
+	delete_range(buf, start, end);
+	clear_selection(buf);
 	return true;
 }
 
