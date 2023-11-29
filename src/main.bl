@@ -52,7 +52,7 @@ WINDOW_SCALE: f32;
 scaling_changed := false;
 
 MOUSE_DRAG_OFFSET :: 4.f;
-MOUSE_DBL_CLICK_S :: 0.5;
+MOUSE_DBL_CLICK_S :: 0.25;
 
 CODE_COLOR_DEFAULT_INDEX   : u8 : 0;
 CODE_COLOR_CURSOR_INDEX    : u8 : 1;
