@@ -6,7 +6,7 @@ Editor :: struct {
 
 	top:           s32;
 	visible_lines: s32;
-
+	
 	left: f32;
 
 	prev_frame_cursor_position: s64;
@@ -309,7 +309,7 @@ draw_text_editor :: fn (index: s32, x: f32, y: f32, w: f32, h: f32, loc := #call
 			if settings.show_line_number {
 				line_number := str_new(32, application_context.temporary_allocator);
 				str_concat(&line_number, i + 1);
-				text(0.0f, ly, line_number, colors.title_bar_text_color);
+				text(x, ly, line_number, colors.title_bar_text_color);
 			}
 			
 			code(tx, ly, line, line_colors, code_color_table);
