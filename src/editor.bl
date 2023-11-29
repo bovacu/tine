@@ -8,7 +8,7 @@ Editor :: struct {
 	visible_lines: s32;
 	
 	left: f32;
-
+				
 	prev_frame_cursor_position: s64;
 	track_recent_locations:     bool;
 
@@ -219,9 +219,9 @@ draw_text_editor :: fn (index: s32, x: f32, y: f32, w: f32, h: f32, loc := #call
 	
 	if settings.show_line_number {
 	    last_line_number := str_new(32, application_context.temporary_allocator);
-	    str_concat(&last_line_number, last_position);
+	    str_concat(&last_line_number, last_line_index);
 	    line_number_size :: text_size(last_line_number, &font_ui_b);
-		tx += line_number_size / 2.0f + 5.0f;
+		tx += line_number_size + 5.0f;
 	}
 
 	// draw selection
