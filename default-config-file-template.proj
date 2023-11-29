@@ -57,6 +57,10 @@ indent_on_tab                          true
 # Insert indentation spaces to the buffer when new line is created.
 indent_on_new_line                     true
 
+# Automatically starts the project with set index. 0 or not having this variable means do 
+# not start a project.
+startup_project							0
+
 # Applied for move-up and move-down commands; in case the cursor ends up in the indentation
 # space of the current line, we try to move it right to the first non-whitespace character.
 # This might reduce movement required to get the cursor to the useful content of the line.
