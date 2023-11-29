@@ -265,6 +265,8 @@ Settings :: struct {
 	save_all_before_build:                  bool;
 	show_hints:                             bool;
 	show_line_number:                       bool;
+
+	startup_project:						s32;
 };
 
 settings: Settings;
@@ -688,7 +690,19 @@ main :: fn () s32 {
 	prev_active_editor := -1;
 	last_focus_index := 0;
 
-	loop WindowShouldClose(window) == 0 {
+	if settings.startup_project > 0 {
+		buf, editor :: get_active_buffer_and_editor();
+		set_mode(Mode.OPEN_PROJECT);
+		invoke_command(editor, buf, Command.OPEN_PROJECT);
+		
+		loop i := 0; i <= settings.startup_project; i += 1 {
+			invoke_command_open_project_mode(buf, Command.MOVE_DOWN);
+		}
+
+		invoke_command_open_project_mode(buf, Command.INSERT_NEW_LINE);
+	}
+
+    loop WindowShouldClose(window) == 0 {
 		current_time :: glfw.GetTime();
 		frame_delta_time = auto (current_time - prev_time) * 1000.;
 		prev_time = current_time;
