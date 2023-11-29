@@ -6,6 +6,7 @@ projects
 /*.o
 /*.a
 /*.exe
+default.proj
 build.bat
 .DS_Store
 Tine
