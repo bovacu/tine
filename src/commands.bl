@@ -337,7 +337,9 @@ select_paragraph :: fn (editor: *Editor, buf: *Buffer) {
 indent_range :: fn (buf: *Buffer, start: s64, end: s64) bool {
 	using std;
 	if maybe_report_readonly(buf) { return false; }
-	assert(end >= start);
+	if end >= start {
+		return false;
+	}
 
 	// Update the indentation info, note that this is internally skipped in case the buffer syntax
 	// is not dirty...
@@ -770,7 +772,7 @@ insert_new_line :: fn (editor: *Editor, buf: *Buffer) bool {
 	return true;
 }
 
-indent :: fn (editor: *Editor, buf: *Buffer) {
+indent :: fn (editor: *Editor, buf: *Buffer) s64 {
 	commit_undo(buf);
 	defer commit_undo(buf);
 
@@ -795,6 +797,8 @@ indent :: fn (editor: *Editor, buf: *Buffer) {
 		set_cursor_position(buf, editor.cursor_index, restore_position);
 		jump_indent_begin(editor, buf);
 	}
+	
+	return restore_position;
 }
 
 move_left :: fn (editor: *Editor, buf: *Buffer) bool {
@@ -919,16 +923,45 @@ append_indentation :: fn (str: *string, n := 1) s64 {
 insert_tab :: fn (editor: *Editor, buf: *Buffer) {
 	if maybe_report_readonly(buf) { return; }
 
-	if has_indentation_info(buf) && settings.indent_on_tab {
-		indent(editor, buf);
-		return;
+	if has_indentation_info(buf) && settings.indent_on_tab && !has_selection(buf, editor.cursor_index) {
+		if indent(editor, buf) > 0 {
+			return;
+		}
 	}
+	
+	if has_selection(buf, editor.cursor_index) {
+		using std;
+		start, end :: get_selection_range(buf, editor.cursor_index);
+		s, e :: expand_range_to_whole_rows(buf, start, end);
+		str       :: peek_range(buf, s, e);
 
-	tmp :: std.str_new(64, application_context.temporary_allocator);
-	append_indentation(&tmp);
+		lines :: str_split_by(str, '\n');
+		defer array_terminate(&lines);
 
-	position :: get_cursor_position(buf, editor.cursor_index);
-	insert_string(buf, position, tmp);
+		indented := str_new(max(str.len, 32)); // 0 cause assertion and we can indent empty lines.
+		defer str_delete(&indented);
+		
+		loop i := 0; i < lines.len; i += 1 {
+			jump_line_begin(editor, buf);
+			tmp :: std.str_new(64, application_context.temporary_allocator);
+			append_indentation(&tmp);
+
+			position :: get_cursor_position(buf, editor.cursor_index);
+			insert_string(buf, position, tmp);
+			jump_next_line(editor, buf);
+		}
+
+		loop i := 0; i < lines.len; i += 1 {
+			jump_prev_line(editor, buf);
+		}
+		
+	} else {
+		tmp :: std.str_new(64, application_context.temporary_allocator);
+		append_indentation(&tmp);
+
+		position :: get_cursor_position(buf, editor.cursor_index);
+		insert_string(buf, position, tmp);
+	}
 }
 
 delete_line :: fn (editor: *Editor, buf: *Buffer) bool {
