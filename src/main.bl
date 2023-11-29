@@ -418,6 +418,12 @@ MouseState :: enum #flags {
 	LB_TRP_PRESS;
 	LB_DRAGGING_START;
 	LB_DRAGGING;
+	MB_4_PRESS;
+	MB_4_DOWN;
+	MB_4_RELEASE;
+	MB_5_PRESS;
+	MB_5_DOWN;
+	MB_5_RELEASE;
 }
 
 MouseCursor :: enum {
@@ -1830,10 +1836,24 @@ mouse_button_callback :: fn (_: *glfw.Window, button: s32, action: s32, _: s32) 
             }
         }
 		MOUSE_BUTTON_4 {
-			jump_to_previous_location();
+			if action == PRESS {
+				set_flag(&mouse.state, MB_4_PRESS);
+				set_flag(&mouse.state, MB_4_DOWN);
+				jump_to_previous_location();
+			} else if action == RELEASE {
+				set_flag(&mouse.state, MB_4_RELEASE);
+				clr_flag(&mouse.state, MB_4_DOWN);
+			}
 		}
 		MOUSE_BUTTON_5 {
-			jump_to_next_location();
+			if action == PRESS {
+				set_flag(&mouse.state, MB_5_PRESS);
+				set_flag(&mouse.state, MB_5_DOWN);
+				jump_to_next_location();
+			} else if action == RELEASE {
+				set_flag(&mouse.state, MB_5_RELEASE);
+				clr_flag(&mouse.state, MB_5_DOWN);
+			}
 		}
         default;
     }
