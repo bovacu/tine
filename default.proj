@@ -52,7 +52,7 @@ indent_on_paste                        true
 
 # Indents current line or selection when insert-tab command is executed; works as usual in
 # case the current line is empty.
-indent_on_tab                          true
+indent_on_tab                          false
 
 # Insert indentation spaces to the buffer when new line is created.
 indent_on_new_line                     true
@@ -78,6 +78,10 @@ save_all_before_build                  true
 
 # Show special command binding in some modes.
 show_hints                             true
+
+# Automatically starts the project with set index. 0 or not having this variable means do 
+# not start a project.
+startup_project							1
 
 ;keys
 # This section contains shortcuts for various commands in the editor.
@@ -107,6 +111,10 @@ move-right           ArrowRight      Ctrl+Semicolon
 move-left            ArrowLeft       Ctrl+J
 move-down            ArrowDown       Ctrl+K
 move-up              ArrowUp         Ctrl+L
+select-right		 Shift+ArrowRight
+select-left		     Shift+ArrowLeft
+select-down		     Shift+ArrowDown
+select-up			 Shift+ArrowUp
 jump-next-word       Ctrl+ArrowRight Ctrl+Alt+Semicolon Alt+Semicolon
 jump-prev-word       Ctrl+ArrowLeft  Ctrl+Alt+J         Alt+J
 jump-next-paragraph  Ctrl+ArrowDown  Ctrl+Alt+K         Alt+K
@@ -118,6 +126,17 @@ jump-begin           Ctrl+Home       Ctrl+Alt+B         Alt+B
 jump-end             Ctrl+End        Ctrl+Alt+E         Alt+E
 jump-page-up         PageUp
 jump-page-down       PageDown
+select-jump-next-word       Shift+Ctrl+ArrowRight Ctrl+Alt+Semicolon Alt+Semicolon
+select-jump-prev-word       Shift+Ctrl+ArrowLeft  Ctrl+Alt+J         Alt+J
+select-jump-next-paragraph  Shift+Ctrl+ArrowDown  Ctrl+Alt+K         Alt+K
+select-jump-prev-paragraph  Shift+Ctrl+ArrowUp    Ctrl+Alt+L         Alt+L
+select-jump-line-end        Shift+End             Ctrl+E
+select-jump-indent-begin    Shift+Home            Ctrl+I
+select-jump-line-begin      Shift+Ctrl+B
+select-jump-begin           Shift+Ctrl+Home       Ctrl+Alt+B         Alt+B
+select-jump-end             Shift+Ctrl+End        Ctrl+Alt+E         Alt+E
+select-jump-page-up         Shift+PageUp
+select-jump-page-down       Shift+PageDown
 center-view          Ctrl+M
 next-error           Ctrl+.
 prev-error           Ctrl+,
@@ -194,50 +213,17 @@ build                F4
 # Ctrl-Space starts selection and Ctrl+/ will comment or uncomment selected block.
 
 # dark colors
-background_color                    303030
-foreground_color                    D4B79C
-cursor_background_color             00FF00
-cursor_foreground_color             303030
-current_line_background_color       202020
-search_result_background_color      01574C
-title_bar_color                     202020
-title_bar_active                    01574C
-title_bar_text_color                D4B79C
-command_background_color            101010
-command_foreground_color            D4B79C
-command_title_color                 3CC7CF
-command_select_color                01574C
-command_list_background_color       303030
-modification_indicator_color        FFFF00
-selection_background_color          00129A
-selection_background_inactive_color 404040
-message_color                       09975A
-warning_color                       DCC80B
-error_color                         E92204
-inline_error_background_color       400809
-inline_warning_background_color     4F4F2D
-
-code_comment                        DCC80B
-code_keyword                        FFFFFF
-code_directive                      9B9B9B
-code_string                         4EC9B0
-code_number                         FFAC9C
-code_invalid                        FF0000
-code_warning                        DCC80B
-code_error                          E92204
-
-# dark colors
 # background_color                    303030
-# foreground_color                    CCCCCC
+# foreground_color                    D4B79C
 # cursor_background_color             00FF00
 # cursor_foreground_color             303030
 # current_line_background_color       202020
 # search_result_background_color      01574C
 # title_bar_color                     202020
 # title_bar_active                    01574C
-# title_bar_text_color                CCCCCC
-# command_background_color            000000
-# command_foreground_color            CCCCCC
+# title_bar_text_color                D4B79C
+# command_background_color            101010
+# command_foreground_color            D4B79C
 # command_title_color                 3CC7CF
 # command_select_color                01574C
 # command_list_background_color       303030
@@ -250,14 +236,47 @@ code_error                          E92204
 # inline_error_background_color       400809
 # inline_warning_background_color     4F4F2D
 
-# code_comment                        00FF80
-# code_keyword                        FFF200
+# code_comment                        DCC80B
+# code_keyword                        FFFFFF
 # code_directive                      9B9B9B
 # code_string                         4EC9B0
 # code_number                         FFAC9C
 # code_invalid                        FF0000
 # code_warning                        DCC80B
 # code_error                          E92204
+
+# dark colors
+background_color                    303030
+foreground_color                    CCCCCC
+cursor_background_color             00FF00
+cursor_foreground_color             303030
+current_line_background_color       202020
+search_result_background_color      01574C
+title_bar_color                     202020
+title_bar_active                    01574C
+title_bar_text_color                CCCCCC
+command_background_color            000000
+command_foreground_color            CCCCCC
+command_title_color                 3CC7CF
+command_select_color                01574C
+command_list_background_color       303030
+modification_indicator_color        FFFF00
+selection_background_color          00129A
+selection_background_inactive_color 404040
+message_color                       09975A
+warning_color                       DCC80B
+error_color                         E92204
+inline_error_background_color       400809
+inline_warning_background_color     4F4F2D
+
+code_comment                        00FF80
+code_keyword                        FFF200
+code_directive                      9B9B9B
+code_string                         4EC9B0
+code_number                         FFAC9C
+code_invalid                        FF0000
+code_warning                        DCC80B
+code_error                          E92204
 
 # light colors
 # background_color                    FFFFFF
