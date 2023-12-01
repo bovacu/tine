@@ -266,6 +266,7 @@ Settings :: struct {
 	show_hints:                             bool;
 	show_line_number:                       bool;
 	autocomplete_braces:                    bool;
+	autocomplete_parenthesis:               bool;
 
 	startup_project:						s32;
 };
@@ -1844,6 +1845,14 @@ autocomplete_braces :: fn() {
 	invoke_command(editor, buf, Command.JUMP_LINE_END);
 }
 
+autocomplete_parenthesis :: fn() {
+	buf, editor :: get_active_buffer_and_editor();
+	close_parenthesis_codepoint : u32 : 41;
+	position :: get_cursor_position(buf, editor.cursor_index);
+	insert_unicode_character(buf, position, close_parenthesis_codepoint);
+	invoke_command(editor, buf, Command.MOVE_LEFT);
+}
+
 character_callback :: fn (_: *glfw.Window, codepoint: u32) {
 	if ignore_char_input { return; }
 	reset_caret_blinking();
@@ -1875,6 +1884,11 @@ character_callback :: fn (_: *glfw.Window, codepoint: u32) {
 	open_brace_codepoint : u32 : 123;
 	if codepoint == open_brace_codepoint && settings.autocomplete_braces {
 		autocomplete_braces();
+	}
+
+	open_parenthesis_codepoint : u32 : 40;
+	if codepoint == open_parenthesis_codepoint && settings.autocomplete_parenthesis {
+		autocomplete_parenthesis();
 	}
 
 	set_prev_executed_command(Command.UNKNOWN);
