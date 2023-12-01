@@ -265,6 +265,7 @@ Settings :: struct {
 	save_all_before_build:                  bool;
 	show_hints:                             bool;
 	show_line_number:                       bool;
+	autocomplete_braces:                    bool;
 
 	startup_project:						s32;
 };
@@ -1800,6 +1801,49 @@ key_callback :: fn (_: *glfw.Window, k: s32, _: s32, action: s32, mods: s32) {
 	}
 }
 
+get_row_visual_indentation_cols :: fn (editor: *Editor, buf: *Buffer) s32 {
+	cursor :: get_cursor(buf, editor.cursor_index);
+	line :: peek_row_without_new_line(buf, cursor.row);
+	num := 0;
+	loop i := 0; i < line.len; i += 1 {
+		c :: line[i];
+		switch c {
+			' '  { num += 1; }
+			'\t' { num += settings.tab_size; }
+			default { break; }
+		}
+	}
+	return num;
+}
+
+autocomplete_braces :: fn() {
+	using std;
+	buf, editor :: get_active_buffer_and_editor();
+	
+	current_indents := get_row_visual_indentation_cols(editor, buf);
+	print_info("Inserted tabs: %", current_indents);
+	loop current_indents % settings.tab_size != 0 {
+		current_indents -= 1;
+	}
+	
+	invoke_command(editor, buf, Command.INSERT_NEW_LINE);
+	loop i := 0; i <= current_indents / settings.tab_size; i += 1 {
+		invoke_command(editor, buf, Command.INSERT_TAB);
+	}
+
+	invoke_command(editor, buf, Command.INSERT_NEW_LINE);
+	loop i := 0; i < current_indents / settings.tab_size; i += 1 {
+		invoke_command(editor, buf, Command.INSERT_TAB);
+	}
+
+	close_brace_codepoint : u32 : 125;
+	position :: get_cursor_position(buf, editor.cursor_index);
+	insert_unicode_character(buf, position, close_brace_codepoint);
+
+	invoke_command(editor, buf, Command.JUMP_PREV_LINE);
+	invoke_command(editor, buf, Command.JUMP_LINE_END);
+}
+
 character_callback :: fn (_: *glfw.Window, codepoint: u32) {
 	if ignore_char_input { return; }
 	reset_caret_blinking();
@@ -1826,6 +1870,11 @@ character_callback :: fn (_: *glfw.Window, codepoint: u32) {
 
 	if has_indentation_info(buf) && std.str_match(FILE_TYPE_REINDENT_ON[auto buf.file_type], inserted) {
 		indent_range(buf, position, position);
+	}
+	
+	open_brace_codepoint : u32 : 123;
+	if codepoint == open_brace_codepoint && settings.autocomplete_braces {
+		autocomplete_braces();
 	}
 
 	set_prev_executed_command(Command.UNKNOWN);
