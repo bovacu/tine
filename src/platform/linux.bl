@@ -57,13 +57,13 @@ get_fonts_directory :: fn () string {
 	return std.str_new("/usr/share/fonts");
 }
 
-new_filepath_from_url :: fn (url: string_view) (err: Error, filepath: string) {
+new_url_from_filepath :: fn (url: string_view) (err: Error, filepath: string) {
 	url;
 	assert(false, "Not implemented!");
 	return OK, std.str_new();
 }
 
-new_filepath_from_url :: fn (url: string_view) (err: Error, filepath: string) {
+new_filepath_from_url :: fn (filepath: string_view) (err: Error, url: string) {
 	filepath;
 	assert(false, "Not implemented!");
 	return OK, std.str_new();
