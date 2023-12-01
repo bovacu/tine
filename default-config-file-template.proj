@@ -57,6 +57,15 @@ indent_on_tab                          true
 # Insert indentation spaces to the buffer when new line is created.
 indent_on_new_line                     true
 
+# Auto complete braces
+autocomplete_braces					   true
+
+# Autocomplete parenthesis
+autocomplete_parenthesis			   true
+
+# Autocomplete brackets
+autocomplete_brackets			       true
+
 # Automatically starts the project with set index. 0 or not having this variable means do 
 # not start a project.
 startup_project							0
