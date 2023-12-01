@@ -24,6 +24,8 @@ Command :: enum {
 	JUMP_PREV_WORD;
 	JUMP_PAGE_UP;
 	JUMP_PAGE_DOWN;
+	JUMP_PREV_LINE;
+	JUMP_NEXT_LINE;
 	SELECT_JUMP_BEGIN;
 	SELECT_JUMP_END;
 	SELECT_JUMP_NEXT_PARAGRAPH;
@@ -182,6 +184,8 @@ invoke_command :: fn (editor: *Editor, buf: *Buffer, cmd: Command) {
 		PASTE                { paste                 (editor, buf); }
 		CUT                  { cut_selection         (editor, buf); }
 		GOOGLE_SELECTION     { google_selection      (editor, buf); }
+		JUMP_PREV_LINE	   { jump_prev_line		(editor, buf); }
+		JUMP_NEXT_LINE	   { jump_next_line		(editor, buf); }
 
 		TO_LOWER {
 			selection_to_upper_or_lower(editor, buf, ToUpperOrLower.LOWER);
@@ -1059,7 +1063,6 @@ insert_tab :: fn (editor: *Editor, buf: *Buffer) {
 		loop i := 0; i < lines.len; i += 1 {
 			jump_prev_line(editor, buf);
 		}
-		
 	} else {
 		tmp :: std.str_new(64, application_context.temporary_allocator);
 		append_indentation(&tmp);
