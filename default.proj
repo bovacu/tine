@@ -60,6 +60,15 @@ indent_on_new_line                     true
 # Shows the line number on the left
 show_line_number					   true
 
+# Auto complete braces
+autocomplete_braces					true
+
+# Autocomplete parenthesis
+autocomplete_parenthesis			   true
+
+# Autocomplete brackets
+autocomplete_brackets			      true
+
 # Applied for move-up and move-down commands; in case the cursor ends up in the indentation
 # space of the current line, we try to move it right to the first non-whitespace character.
 # This might reduce movement required to get the cursor to the useful content of the line.
