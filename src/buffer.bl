@@ -276,7 +276,7 @@ try_set_cursor_row_col :: fn (buf: *Buffer, cursor_index: s32, row: s32, col: s3
 
 get_closest_cursor_row_col_position :: fn (buf: *Buffer, row: s32, col: s32) s64 {
 	line, start_index := peek_row(buf, row);
-	if line.len == 0 { return 0; }
+	if line.len == 0 { return start_index; }
 
 	valid_cols: s32;
 	loop i := 0; i < line.len && valid_cols < col; valid_cols += 1 {
