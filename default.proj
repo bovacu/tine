@@ -12,6 +12,8 @@
 #
 # Example:
 #   C:/my/project/root
+C:/Users/vazqu/Programs/tine
+C:/Users/vazqu/Documents/languages/bl
 
 ;exclude
 # List of directories exluded from the project.
@@ -29,6 +31,7 @@
 #
 # Example:
 #   .bl .txt .cpp .h
+.bl
 
 ;settings
 font_size                              12
@@ -61,13 +64,15 @@ indent_on_new_line                     true
 show_line_number					   true
 
 # Auto complete braces
-autocomplete_braces					true
+autocomplete_braces					   true
 
 # Autocomplete parenthesis
 autocomplete_parenthesis			   true
 
 # Autocomplete brackets
-autocomplete_brackets			      true
+autocomplete_brackets			       true
+
+startup_project							0
 
 # Applied for move-up and move-down commands; in case the cursor ends up in the indentation
 # space of the current line, we try to move it right to the first non-whitespace character.
@@ -75,22 +80,18 @@ autocomplete_brackets			      true
 vertical_move_tries_follow_indentation true
 
 # Start LSP server automatically if available.
-use_lsp                                false
+use_lsp                                true
 
 # Show inline hints from the LSP diagnostics.
-show_lsp_inline_diagnostics            false
+show_lsp_inline_diagnostics            true
 
 # Use large block caret when true.
 block_caret                            true
-maximize_on_start                      true
+maximize_on_start                      false
 save_all_before_build                  true
 
 # Show special command binding in some modes.
 show_hints                             true
-
-# Automatically starts the project with set index. 0 or not having this variable means do 
-# not start a project.
-startup_project							1
 
 ;keys
 # This section contains shortcuts for various commands in the editor.
@@ -146,6 +147,8 @@ select-jump-begin           Shift+Ctrl+Home       Ctrl+Alt+B         Alt+B
 select-jump-end             Shift+Ctrl+End        Ctrl+Alt+E         Alt+E
 select-jump-page-up         Shift+PageUp
 select-jump-page-down       Shift+PageDown
+move-to-left-split		  Alt+ArrowLeft
+move-to-right-split		 Alt+ArrowRight
 center-view          Ctrl+M
 next-error           Ctrl+.
 prev-error           Ctrl+,
