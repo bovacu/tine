@@ -74,6 +74,8 @@ Command :: enum {
 	OTHER_SPLIT;
 	CLOSE_SPLIT;
 	CLOSE_OTHER_SPLIT;
+	MOVE_TO_LEFT_SPLIT;
+	MOVE_TO_RIGHT_SPLIT;
 
 	// Buffers
 	CLOSE_BUFFER;
@@ -490,6 +492,8 @@ invoke_command_text_edit_mode :: fn (buf: *Buffer, cmd: Command) bool {
 		OTHER_SPLIT         { other_split         (buf);                                   }
 		CLOSE_SPLIT         { close_split         ();                                      }
 		CLOSE_OTHER_SPLIT   { close_other_split   ();                                      }
+		MOVE_TO_LEFT_SPLIT  { move_to_left_split  ();								      }
+		MOVE_TO_RIGHT_SPLIT { move_to_right_split ();								      }
 		CLOSE_BUFFER        { close_buffer_command(buf);                                   }
 		FORCE_CLOSE_BUFFER  { force_close_buffer  (buf);                                   }
 		SAVE                { save_command        (buf);                                   }
@@ -1308,25 +1312,6 @@ jump_prev_word :: fn (editor: *Editor, buf: *Buffer) bool {
 
 // -------------
 
-// select_jump_next_line :: fn (editor: *Editor, buf: *Buffer) bool {
-// 	if !has_selection(buf, editor.cursor_index) {
-// 		start_selection(buf, editor.cursor_index);
-// 	}
-
-// 	jump_next_line(editor, buf);
-// 	return true;
-// }
-
-
-// select_jump_prev_line :: fn (editor: *Editor, buf: *Buffer) bool {
-// 	if !has_selection(buf, editor.cursor_index) {
-// 		start_selection(buf, editor.cursor_index);
-// 	}
-
-// 	jump_prev_line(editor, buf);
-// 	return true;
-// }
-
 select_jump_begin :: fn (editor: *Editor, buf: *Buffer) bool {
 	if !has_selection(buf, editor.cursor_index) {
 		start_selection(buf, editor.cursor_index);
@@ -1401,6 +1386,38 @@ increase_font_size :: fn () bool {
 decrease_font_size :: fn () bool {
 	settings.font_size = std.clamp(settings.font_size - FONT_RESIZE_STEP, MIN_FONT_SIZE, MAX_FONT_SIZE);
 	rebuild_fonts();
+	return true;
+}
+
+move_to_right_split :: fn () bool {
+	if right == -1 {
+		return true;
+	}
+	
+	using Split;
+	active_split :: get_active_split();
+	switch active_split {
+		LEFT    { active_editor = right; }
+		RIGHT   { return true;  		 }
+		default { panic();               }
+	}
+
+	return true;
+}
+
+move_to_left_split :: fn () bool {
+	if left == -1 {
+		return true;
+	}
+
+	using Split;
+	active_split :: get_active_split();
+	switch active_split {
+		LEFT    { return true; 		  }
+		RIGHT   { active_editor = left;  }
+		default { panic();               }
+	}
+
 	return true;
 }
 
