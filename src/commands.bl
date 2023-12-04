@@ -163,8 +163,8 @@ invoke_command :: fn (editor: *Editor, buf: *Buffer, cmd: Command) {
 		SELECT_LEFT		  { select_left		   (editor, buf); }
 		JUMP_LINE_END        { jump_line_end         (editor, buf); }
 		JUMP_LINE_BEGIN      { jump_line_begin       (editor, buf); }
-		JUMP_NEXT_WORD       { jump_next_word        (editor, buf); }
-		JUMP_PREV_WORD       { jump_prev_word        (editor, buf); }
+		JUMP_NEXT_WORD       { jump_next_word_or_symbol        (editor, buf); }
+		JUMP_PREV_WORD       { jump_prev_word_or_symbol        (editor, buf); }
 		SELECT_JUMP_LINE_END        { select_jump_line_end         (editor, buf); }
 		SELECT_JUMP_LINE_BEGIN      { select_jump_line_begin       (editor, buf); }
 		SELECT_JUMP_NEXT_WORD       { select_jump_next_word        (editor, buf); }
@@ -1275,12 +1275,31 @@ jump_next_word :: fn (editor: *Editor, buf: *Buffer) bool {
 	return true;
 }
 
+jump_next_word_or_symbol :: fn (editor: *Editor, buf: *Buffer) bool {
+	position := get_cursor_position(buf, editor.cursor_index);
+	defer set_cursor_position(buf, editor.cursor_index, position);
+	if !is_ident(buf, peek_position(buf, position)) {
+		char :: peek_position(buf, position);
+		position += char.len;
+		return true;
+	}
+	loop {
+		char :: peek_position(buf, position);
+		if char.len == 0 { return true; } // End of the file...
+		if is_ident(buf, char) {
+			position += char.len;
+		} else {
+			break;
+		}
+	}
+	return true;
+}
+
 jump_prev_word_or_symbol :: fn (editor: *Editor, buf: *Buffer) bool {
 	position := get_cursor_position(buf, editor.cursor_index);
 	defer set_cursor_position(buf, editor.cursor_index, position);
 	char := peek_before_position(buf, position);
 	if !is_ident(buf, char) {
-		print_info("Not indent");
 		position -= char.len;
 
 		using std;
@@ -1381,7 +1400,7 @@ select_jump_next_word :: fn (editor: *Editor, buf: *Buffer) bool {
 		start_selection(buf, editor.cursor_index);
 	}
 	
-	jump_next_word(editor, buf);
+	jump_next_word_or_symbol(editor, buf);
 	return true;
 }
 
@@ -1390,7 +1409,7 @@ select_jump_prev_word :: fn (editor: *Editor, buf: *Buffer) bool {
 		start_selection(buf, editor.cursor_index);
 	}
 	
-	jump_prev_word(editor, buf);
+	jump_prev_word_or_symbol(editor, buf);
 	return true;
 }
 
