@@ -799,10 +799,6 @@ insert_new_line :: fn (editor: *Editor, buf: *Buffer) bool {
 	if maybe_report_readonly(buf) { return false; }
 	commit_undo(buf);
 
-	if has_selection(buf, editor.cursor_index) {
-		cut_selection(editor, buf);
-	}
-
 	position := get_cursor_position(buf, editor.cursor_index);
 	insert_string(buf, position, get_line_ending(buf.line_ending));
 
