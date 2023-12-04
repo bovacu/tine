@@ -1097,7 +1097,7 @@ duplicate_line :: fn (editor: *Editor, buf: *Buffer) bool {
 delete_word_left :: fn (editor: *Editor, buf: *Buffer) bool {
 	if maybe_report_readonly(buf) { return false; }
 	start_selection(buf, editor.cursor_index);
-	jump_prev_word(editor, buf);
+	jump_prev_word_or_symbol(editor, buf);
 	start, end :: get_selection_range(buf, editor.cursor_index);
 	delete_range(buf, start, end);
 	clear_selection(buf);
@@ -1268,6 +1268,35 @@ jump_next_word :: fn (editor: *Editor, buf: *Buffer) bool {
 		if char.len == 0 { return true; } // End of the file...
 		if is_ident(buf, char) {
 			position += char.len;
+		} else {
+			break;
+		}
+	}
+	return true;
+}
+
+jump_prev_word_or_symbol :: fn (editor: *Editor, buf: *Buffer) bool {
+	position := get_cursor_position(buf, editor.cursor_index);
+	defer set_cursor_position(buf, editor.cursor_index, position);
+	char := peek_before_position(buf, position);
+	if !is_ident(buf, char) {
+		print_info("Not indent");
+		position -= char.len;
+
+		using std;
+		loop str_compare(char, " ") == 0 || str_compare(char, "\t") == 0 {
+			if char.len == 0 { break; }
+			position -= char.len;
+			char = peek_before_position(buf, position);
+			if is_ident(buf, char) { break; }
+		}
+		return true;
+	}
+	loop {
+		char :: peek_before_position(buf, position);
+		if char.len == 0 { break; }
+		if is_ident(buf, char) {
+			position -= char.len;
 		} else {
 			break;
 		}
