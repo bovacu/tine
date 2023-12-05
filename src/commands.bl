@@ -291,7 +291,8 @@ paste :: fn (editor: *Editor, buf: *Buffer) {
 		}
 	}
 
-	cut_selection(editor, buf);
+	selection_start, selection_end :: get_selection_range(buf, editor.cursor_index);
+	delete_range(buf, selection_start, selection_end);
 	start :: get_cursor_position(buf, editor.cursor_index);
 	insert_string(buf, start, text);
 
@@ -299,6 +300,8 @@ paste :: fn (editor: *Editor, buf: *Buffer) {
 		end :: get_cursor_position(buf, editor.cursor_index);
 		indent_range(buf, start, end);
 	}
+	
+	clear_selection(buf, editor.cursor_index);
 }
 
 goto_line :: fn (editor: *Editor, buf: *Buffer, line: s64) {
@@ -761,6 +764,7 @@ delete_left :: fn (editor: *Editor, buf: *Buffer) {
 		start, end :: get_selection_range(buf, editor.cursor_index);
 		delete_range(buf, start, end);
 		clear_selection(buf);
+		print_info("Delete left");
 		return;
 	}
 
@@ -1080,6 +1084,7 @@ delete_line :: fn (editor: *Editor, buf: *Buffer) bool {
 	start, end :: get_selection_range(buf, editor.cursor_index);
 	delete_range(buf, start, end);
 	clear_selection(buf);
+	print_info("Delete line");
 	return true;
 }
 
@@ -1101,6 +1106,7 @@ delete_word_left :: fn (editor: *Editor, buf: *Buffer) bool {
 	start, end :: get_selection_range(buf, editor.cursor_index);
 	delete_range(buf, start, end);
 	clear_selection(buf);
+	print_info("Delete word left");
 	return true;
 }
 
