@@ -72,8 +72,6 @@ autocomplete_parenthesis			   true
 # Autocomplete brackets
 autocomplete_brackets			       true
 
-startup_project							0
-
 # Applied for move-up and move-down commands; in case the cursor ends up in the indentation
 # space of the current line, we try to move it right to the first non-whitespace character.
 # This might reduce movement required to get the cursor to the useful content of the line.
