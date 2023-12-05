@@ -268,8 +268,6 @@ Settings :: struct {
 	autocomplete_braces:                    bool;
 	autocomplete_parenthesis:               bool;
 	autocomplete_brackets:                  bool;
-
-	startup_project:						s32;
 };
 
 settings: Settings;
