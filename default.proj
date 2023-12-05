@@ -12,8 +12,8 @@
 #
 # Example:
 #   C:/my/project/root
+C:/Users/vazqu/Documents/RDE
 C:/Users/vazqu/Programs/tine
-C:/Users/vazqu/Documents/languages/bl
 
 ;exclude
 # List of directories exluded from the project.
