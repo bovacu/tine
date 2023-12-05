@@ -693,18 +693,6 @@ main :: fn () s32 {
 	prev_active_editor := -1;
 	last_focus_index := 0;
 
-	if settings.startup_project > 0 {
-		buf, editor :: get_active_buffer_and_editor();
-		set_mode(Mode.OPEN_PROJECT);
-		invoke_command(editor, buf, Command.OPEN_PROJECT);
-		
-		loop i := 0; i <= settings.startup_project; i += 1 {
-			invoke_command_open_project_mode(buf, Command.MOVE_DOWN);
-		}
-
-		invoke_command_open_project_mode(buf, Command.INSERT_NEW_LINE);
-	}
-
     loop WindowShouldClose(window) == 0 {
 		current_time :: glfw.GetTime();
 		frame_delta_time = auto (current_time - prev_time) * 1000.;
