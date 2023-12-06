@@ -72,6 +72,12 @@ autocomplete_parenthesis			   true
 # Autocomplete brackets
 autocomplete_brackets			       true
 
+# Autocomplete double quotes
+autocomplete_double_quote			   true
+
+# Autocomplete single quotes
+autocomplete_single_quote			   true
+
 # Applied for move-up and move-down commands; in case the cursor ends up in the indentation
 # space of the current line, we try to move it right to the first non-whitespace character.
 # This might reduce movement required to get the cursor to the useful content of the line.
